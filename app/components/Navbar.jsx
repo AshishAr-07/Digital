@@ -50,7 +50,7 @@ const Navbar = () => {
                         </Link>
                     </nav>
 
-                    <div className="hidden md:flex items-center">
+                    <div className="hidden md:flex gap-2 items-center">
                         <SignedOut>
                             <SignInButton>
                                 <button className="bg-transparent border-2 border-[#6c47ff] text-[#6c47ff] rounded-full font-medium text-sm sm:text-base py-2 px-4 sm:px-5 cursor-pointer hover:bg-[#6c47ff] hover:text-white transition-all duration-300 ease-in-out">

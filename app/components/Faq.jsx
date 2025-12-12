@@ -34,7 +34,7 @@ const FAQ = () => {
     const faqs = [
         {
             question: "How do I receive my purchase?",
-            answer: 'Immediately after checkout, you will receive an email with a download link. This download is a PDF Instruction Guide. Open this PDF, and you will find a direct button/link that says "Access Template." Clicking that link will automatically open the design in your Canva account.'
+            answer: 'Immediately after purchase, you will receive an email with a download link. This download is a PDF Instruction Guide. Open this PDF, and you will find a direct button/link that says "Access Template." Clicking that link will automatically open the design in your Canva account.'
         },
         {
             question: 'Do I need a Canva account to download and edit these templates?',
