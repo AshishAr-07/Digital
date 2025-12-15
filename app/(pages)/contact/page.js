@@ -24,7 +24,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-2xl font-semibold mb-3">Address</h3>
             <p className="mb-2">
-              Rzh-261 gali-08 Raj Nagar-2 ,Palam colony New Delhi, Delhi 110077
+               New Delhi, Delhi 110077 , India
             </p>
           </div>
 
