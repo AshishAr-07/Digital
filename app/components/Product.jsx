@@ -8,6 +8,21 @@ export default function Product() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currency, setCurrency] = useState('INR')
+
+  const currencies = {
+    INR: { symbol: '₹', rate: 83.12, name: 'Indian Rupee' },
+    USD: { symbol: '$', rate: 1, name: 'US Dollar' },
+    EUR: { symbol: '€', rate: 0.92, name: 'Euro' },
+    GBP: { symbol: '£', rate: 0.79, name: 'British Pound' },
+    CAD: { symbol: 'C$', rate: 1.36, name: 'Canadian Dollar' },
+    AUD: { symbol: 'A$', rate: 1.53, name: 'Australian Dollar' },
+  }
+
+  const convertPrice = (price) => {
+    const converted = price * currencies[currency].rate
+    return currency === 'JPY' ? Math.round(converted) : converted.toFixed(2)
+  }
 
   useEffect(() => {
     fetchProducts()
@@ -66,8 +81,27 @@ export default function Product() {
   return (
     <Wrapper>
       <div className="mb-8">
-        <h2 className="text-4xl font-bold text-center mb-2">Our Products</h2>
-        <p className="text-center text-gray-600">Browse our collection of festive digital templates</p>
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex-1">
+            <h2 className="text-4xl font-bold text-center mb-2">Our Products</h2>
+            <p className="text-center text-gray-600">Browse our collection of festive digital templates</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <label htmlFor="currency" className="text-sm font-medium text-gray-700">Currency:</label>
+            <select
+              id="currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500"
+            >
+              {Object.entries(currencies).map(([code, { symbol, name }]) => (
+                <option key={code} value={code}>
+                  {symbol} {code} - {name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -83,10 +117,10 @@ export default function Product() {
                 alt={product.title}
                 className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
               />
-            
+
               {product.originalPrice && product.originalPrice !== product.salePrice && (
                 <div className="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                  SAVE ${(product.originalPrice - product.salePrice).toFixed(2)}
+                  SAVE {currencies[currency].symbol}{convertPrice(product.originalPrice - product.salePrice)}
                 </div>
               )}
             </div>
@@ -100,11 +134,11 @@ export default function Product() {
               </p>
               <div className="flex items-baseline gap-3 mb-4">
                 <span className="text-3xl font-bold text-red-700">
-                  ${product.salePrice}
+                  {currencies[currency].symbol}{convertPrice(product.salePrice)}
                 </span>
                 {product.originalPrice && product.originalPrice !== product.salePrice && (
                   <span className="text-lg text-gray-400 line-through">
-                    ${product.originalPrice}
+                    {currencies[currency].symbol}{convertPrice(product.originalPrice)}
                   </span>
                 )}
               </div>

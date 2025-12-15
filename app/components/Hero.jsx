@@ -30,7 +30,7 @@ export default function Hero() {
                             
                             <div className='flex flex-col sm:flex-row gap-4 mt-8'>
                                 <Link
-                                    href="#"
+                                    href="/products"
                                     className='uppercase py-3 px-6 rounded-lg bg-linear-to-r from-red-600 to-red-900 text-white text-sm font-semibold text-center hover:shadow-xl hover:scale-105 transition-all duration-300'
                                 >
                                     Explore Products

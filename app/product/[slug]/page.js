@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import Wrapper from "@/app/components/Wrapper";
 import Counter from "@/app/components/Counter";
 import Features from "@/app/components/Features";
@@ -10,18 +11,56 @@ import { InfiniteMovingCardsDemo } from "@/app/components/Testimonials";
 export default function Page() {
   const params = useParams();
   const router = useRouter();
+  const { user, isLoaded, isSignedIn } = useUser();
   const slug = params.slug;
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [currency, setCurrency] = useState("INR"); // Changed default to INR
+  const [processingPayment, setProcessingPayment] = useState(false);
+
+  const currencies = {
+    INR: { symbol: "₹", rate: 83.12, name: "Indian Rupee", razorpay: "INR" },
+    USD: { symbol: "$", rate: 1, name: "US Dollar", razorpay: "USD" },
+    EUR: { symbol: "€", rate: 0.92, name: "Euro", razorpay: "EUR" },
+    GBP: { symbol: "£", rate: 0.79, name: "British Pound", razorpay: "GBP" },
+    CAD: { symbol: "C$", rate: 1.36, name: "Canadian Dollar", razorpay: "CAD" },
+    AUD: {
+      symbol: "A$",
+      rate: 1.53,
+      name: "Australian Dollar",
+      razorpay: "AUD",
+    },
+  };
+
+  const convertPrice = (price) => {
+    const converted = price * currencies[currency].rate;
+    return currency === "JPY" ? Math.round(converted) : converted.toFixed(2);
+  };
+
+  const getActualPrice = (price) => {
+    return price * currencies[currency].rate;
+  };
 
   useEffect(() => {
     if (slug) {
       fetchProduct();
     }
   }, [slug]);
+
+  // Load Razorpay script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const fetchProduct = async () => {
     try {
@@ -41,9 +80,110 @@ export default function Page() {
     }
   };
 
-  const handleBuyNow = () => {
-    // TODO: Implement payment logic
-    console.log("Buy now clicked for:", product._id);
+  const handleBuyNow = async () => {
+    if (!isSignedIn) {
+      alert("Please sign in to make a purchase");
+      return;
+    }
+
+    if (!product) return;
+
+    setProcessingPayment(true);
+
+    try {
+      const actualAmount = getActualPrice(product.salePrice);
+      const razorpayCurrency = currencies[currency].razorpay || currency;
+
+      // Create Razorpay order
+      const orderResponse = await fetch("/api/razorpay/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: actualAmount,
+          currency: razorpayCurrency,
+          productId: product._id,
+          productTitle: product.title,
+        }),
+      });
+
+      const orderData = await orderResponse.json();
+
+      if (!orderData.success) {
+        throw new Error(orderData.message || "Failed to create order");
+      }
+
+      // Initialize Razorpay payment
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Digital Products",
+        description: product.title,
+        image: product.imagesPath?.[0] || "", // Optional: Add product image
+        order_id: orderData.orderId,
+        prefill: {
+          name: user?.fullName || "",
+          email: user?.emailAddresses?.[0]?.emailAddress || "",
+          contact: "", // Add phone number if available
+        },
+        theme: {
+          color: "#b91c1c", // red-700
+        },
+        handler: async function (response) {
+          // Payment successful, verify and create order
+          try {
+            const verifyResponse = await fetch("/api/razorpay/verify-payment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                productId: product._id,
+                email: user?.emailAddresses?.[0]?.emailAddress || "",
+                name: user?.fullName || "Customer",
+                amount: actualAmount,
+                currency: razorpayCurrency,
+              }),
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyData.success) {
+              router.push("/orders");
+            } else {
+              throw new Error(
+                verifyData.message || "Payment verification failed"
+              );
+            }
+          } catch (error) {
+            console.error("Verification error:", error);
+            alert(
+              "Payment verification failed. Please contact support with your payment ID: " +
+                response.razorpay_payment_id
+            );
+          } finally {
+            setProcessingPayment(false);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setProcessingPayment(false);
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Failed to initiate payment: " + error.message);
+      setProcessingPayment(false);
+    }
   };
 
   if (loading) {
@@ -87,26 +227,49 @@ export default function Page() {
   return (
     <>
       <Wrapper>
-        {/* Back Button */}
-        <button
-          onClick={() => router.push("/")}
-          className="inline-flex items-center text-red-700 hover:text-red-800 mb-8 transition-colors font-medium"
-        >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* Back Button and Currency Selector */}
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => router.push("/")}
+            className="inline-flex items-center text-red-700 hover:text-red-800 transition-colors font-medium"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back to Products
-        </button>
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to Products
+          </button>
+
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="currency"
+              className="text-sm font-medium text-gray-700"
+            >
+              Currency:
+            </label>
+            <select
+              id="currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500"
+            >
+              {Object.entries(currencies).map(([code, { symbol, name }]) => (
+                <option key={code} value={code}>
+                  {symbol} {code} - {name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Images Section */}
@@ -171,12 +334,14 @@ export default function Page() {
 
               <div className="flex items-baseline gap-4 mb-6">
                 <span className="text-5xl font-bold text-red-700">
-                  ${product.salePrice}
+                  {currencies[currency].symbol}
+                  {convertPrice(product.salePrice)}
                 </span>
                 {product.originalPrice &&
                   product.originalPrice !== product.salePrice && (
                     <span className="text-2xl text-gray-400 line-through">
-                      ${product.originalPrice}
+                      {currencies[currency].symbol}
+                      {convertPrice(product.originalPrice)}
                     </span>
                   )}
               </div>
@@ -193,10 +358,44 @@ export default function Page() {
             <div className="space-y-4 pt-6">
               <button
                 onClick={handleBuyNow}
-                className="w-full bg-red-700 text-white rounded-xl py-4 px-8 font-semibold text-lg hover:bg-red-800 hover:shadow-xl hover:scale-105 transition-all duration-300"
+                disabled={processingPayment}
+                className={`w-full bg-red-700 text-white rounded-xl py-4 px-8 font-semibold text-lg hover:bg-red-800 hover:shadow-xl hover:scale-105 transition-all duration-300 ${
+                  processingPayment ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
-                🎉 Buy Now - Instant Download
+                {processingPayment ? (
+                  <span className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 mr-3"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Processing...
+                  </span>
+                ) : (
+                  "🎉 Buy Now - Instant Download"
+                )}
               </button>
+
+              {!isSignedIn && (
+                <p className="text-sm text-center text-gray-600">
+                  Please sign in to make a purchase
+                </p>
+              )}
 
               <div className="bg-red-50 border border-red-200 rounded-xl p-6">
                 <h3 className="font-semibold mb-4 flex items-center text-lg text-red-900">
@@ -286,29 +485,6 @@ export default function Page() {
                   </li>
                 </ul>
               </div>
-
-              {/* <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 className="font-semibold mb-2 flex items-center text-blue-900">
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  How it works
-                </h3>
-                <p className="text-sm text-blue-800">
-                  After purchase, you'll receive an email with a PDF guide
-                  containing a direct link to your Canva template. Click the
-                  link, and it will automatically save to your Canva account
-                  where you can edit and download it instantly!
-                </p>
-              </div> */}
             </div>
           </div>
         </div>
