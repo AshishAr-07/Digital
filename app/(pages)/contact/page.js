@@ -18,6 +18,16 @@ export default function ContactPage() {
       {/* Contact Information */}
       <Wrapper>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
+              <FaMapMarkerAlt className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-2xl font-semibold mb-3">Address</h3>
+            <p className="mb-2">
+              Rzh-261 gali-08 Raj Nagar-2 ,Palam colony New Delhi, Delhi 110077
+            </p>
+          </div>
+
           {/* Contact Details */}
           <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
