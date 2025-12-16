@@ -228,7 +228,7 @@ export default function Page() {
     <>
       <Wrapper>
         {/* Back Button and Currency Selector */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <button
             onClick={() => router.push("/")}
             className="inline-flex items-center text-red-700 hover:text-red-800 transition-colors font-medium"
@@ -246,13 +246,14 @@ export default function Page() {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Back to Products
+            <span className="hidden sm:inline">Back to Products</span>
+            <span className="sm:hidden">Back</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <label
               htmlFor="currency"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-gray-700 whitespace-nowrap"
             >
               Currency:
             </label>
@@ -260,7 +261,7 @@ export default function Page() {
               id="currency"
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500 text-sm sm:text-base"
             >
               {Object.entries(currencies).map(([code, { symbol, name }]) => (
                 <option key={code} value={code}>

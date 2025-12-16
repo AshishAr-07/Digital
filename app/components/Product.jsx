@@ -81,18 +81,18 @@ export default function Product() {
   return (
     <Wrapper>
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex-1">
-            <h2 className="text-4xl font-bold text-center mb-2">Our Products</h2>
-            <p className="text-center text-gray-600">Browse our collection of festive digital templates</p>
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 mb-6">
+          <div className="flex-1 text-center lg:text-left">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2">Our Products</h2>
+            <p className="text-gray-600 text-sm sm:text-base">Browse our collection of festive digital templates</p>
           </div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="currency" className="text-sm font-medium text-gray-700">Currency:</label>
+          <div className="flex items-center gap-2 justify-center lg:justify-end">
+            <label htmlFor="currency" className="text-sm font-medium text-gray-700 whitespace-nowrap">Currency:</label>
             <select
               id="currency"
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500"
+              className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white cursor-pointer hover:border-red-500 text-sm sm:text-base"
             >
               {Object.entries(currencies).map(([code, { symbol, name }]) => (
                 <option key={code} value={code}>
