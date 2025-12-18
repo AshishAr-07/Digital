@@ -18,7 +18,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [currency, setCurrency] = useState("INR"); // Changed default to INR
+  const [currency, setCurrency] = useState("USD");
   const [processingPayment, setProcessingPayment] = useState(false);
 
   const currencies = {

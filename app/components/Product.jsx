@@ -8,7 +8,7 @@ export default function Product() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [currency, setCurrency] = useState('INR')
+  const [currency, setCurrency] = useState('USD')
 
   const currencies = {
     INR: { symbol: '₹', rate: 83.12, name: 'Indian Rupee' },
@@ -83,7 +83,7 @@ export default function Product() {
       <div className="mb-8">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 mb-6">
           <div className="flex-1 text-center lg:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-2">Our Products</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2">Our Digital Products</h2>
             <p className="text-gray-600 text-sm sm:text-base">Browse our collection of festive digital templates</p>
           </div>
           <div className="flex items-center gap-2 justify-center lg:justify-end">
@@ -104,7 +104,7 @@ export default function Product() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((product) => (
           <Link
             key={product._id}
