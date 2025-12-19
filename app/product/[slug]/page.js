@@ -302,26 +302,79 @@ export default function Page() {
 
             {/* Thumbnail Images */}
             {product.imagesPath && product.imagesPath.length > 1 && (
-              <div className="flex gap-4 overflow-x-auto p-4 rounded-2xl border border-gray-200">
-                {product.imagesPath.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`relative shrink-0 w-24 aspect-4/3 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index
-                        ? "border-red-700 ring-1 ring-red-700 ring-opacity-50 scale-105"
-                        : "border-gray-300 hover:border-red-500"
-                    }`}
+              <div className="relative">
+                {/* Left Arrow */}
+                <button
+                  onClick={() =>
+                    setSelectedImage((prev) =>
+                      prev === 0 ? product.imagesPath.length - 1 : prev - 1
+                    )
+                  }
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/60 hover:bg-white p-2 rounded-full shadow-lg transition-all hover:scale-110"
+                  aria-label="Previous image"
+                >
+                  <svg
+                    className="w-3 h-3 text-red-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <Image
-                      src={image}
-                      alt={`${product.title} - ${index + 1}`}
-                      fill
-                      className="object-contain"
-                      sizes="96px"
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
                     />
-                  </button>
-                ))}
+                  </svg>
+                </button>
+
+                {/* Thumbnails Container */}
+                <div className="flex gap-4 overflow-x-auto p-4 rounded-2xl border border-gray-200 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  {product.imagesPath.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`relative shrink-0 w-24 aspect-4/3 rounded-lg overflow-hidden border-2 transition-all ${
+                        selectedImage === index
+                          ? "border-red-700 ring-1 ring-red-700 ring-opacity-50 scale-105"
+                          : "border-gray-300 hover:border-red-500"
+                      }`}
+                    >
+                      <Image
+                        src={image}
+                        alt={`${product.title} - ${index + 1}`}
+                        fill
+                        className="object-contain"
+                        sizes="96px"
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                {/* Right Arrow */}
+                <button
+                  onClick={() =>
+                    setSelectedImage((prev) =>
+                      prev === product.imagesPath.length - 1 ? 0 : prev + 1
+                    )
+                  }
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/60 hover:bg-white p-2 rounded-full shadow-lg transition-all hover:scale-110"
+                  aria-label="Next image"
+                >
+                  <svg
+                    className="w-3 h-3 text-red-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
               </div>
             )}
           </div>
