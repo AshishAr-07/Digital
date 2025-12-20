@@ -11,9 +11,8 @@ export default function Counter() {
     })
 
     useEffect(() => {
-        // Set target date (e.g., 7 days from now)
-        const targetDate = new Date()
-        targetDate.setDate(targetDate.getDate() + 2)
+        // Set fixed target date to December 22, 2025 at 23:59:59
+        const targetDate = new Date('2025-12-22T23:59:59')
 
         const timer = setInterval(() => {
             const now = new Date().getTime()
