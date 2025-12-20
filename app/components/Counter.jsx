@@ -13,7 +13,7 @@ export default function Counter() {
     useEffect(() => {
         // Set target date (e.g., 7 days from now)
         const targetDate = new Date()
-        targetDate.setDate(targetDate.getDate() + 7)
+        targetDate.setDate(targetDate.getDate() + 2)
 
         const timer = setInterval(() => {
             const now = new Date().getTime()
@@ -65,9 +65,9 @@ export default function Counter() {
                             <span className='text-4xl animate-pulse'>🎄</span>
                         </div>
                         <p className='text-xl md:text-2xl text-red-50 font-semibold'>
-                            Unwrap the Perfect Gift for Only{' '}
-                            <span className='inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-4xl md:text-5xl font-black text-yellow-300 shadow-lg'>
-                                $1
+                            Unwrap the Perfect Gift for {' '}
+                            <span className='inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-4xl md:text-5xl font-black text-white shadow-lg'>
+                                Christmas
                             </span>
                         </p>
                     </div>
