@@ -382,12 +382,12 @@ export default function Page() {
           {/* Product Details Section */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
+              <h1 className="text-3xl lg:text-5xl font-bold mb-4 text-gray-900">
                 {product.title}
               </h1>
 
               <div className="flex items-baseline gap-4 mb-6">
-                <span className="text-5xl font-bold text-red-700">
+                <span className="text-3xl lg:text-5xl font-bold text-red-700">
                   {currencies[currency].symbol}
                   {convertPrice(product.salePrice)}
                 </span>
@@ -403,7 +403,7 @@ export default function Page() {
 
             <div className="border-t border-gray-200 pt-6">
               <h2 className="text-2xl font-semibold mb-3">Description</h2>
-              <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
+              <p className="text-gray-600 text-justify text-lg leading-relaxed whitespace-pre-wrap">
                 {product.description}
               </p>
             </div>
