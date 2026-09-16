@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "CatchyDeals | Digital Store",
   description: "We are committed to your holiday cheer by offering a wide range of high-quality digital templates and games at affordable prices. Explore our collection and find the perfect digital products to make your celebrations unforgettable.",
+  other:{
+    "p:domain_verify" :"169e23c899062213dbee54d7edea0c0c",
+  }
 };
 
 export default function RootLayout({ children }) {
