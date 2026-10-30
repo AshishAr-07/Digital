@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true }, // Clerk user ID
+    // userId is optional — populated for signed-in users, absent for guests
+    userId: { type: String, default: null },
     email: { type: String, required: true },
     name: { type: String, required: true },
     
@@ -12,7 +13,7 @@ const orderSchema = new mongoose.Schema(
         title: { type: String, required: true },
         salePrice: { type: Number, required: true },
         canvaUrl: { type: String, required: true },
-        imagePath: { type: String, required: true }
+        imagePath: { type: String, default: "" }
       }
     ],
     

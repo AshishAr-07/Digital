@@ -1,6 +1,20 @@
 import Wrapper from "@/app/components/Wrapper";
 import React from "react";
 
+export const metadata = {
+  title: "Privacy Policy | CatchyDeals Digital Store",
+  description:
+    "Learn how CatchyDeals Digital Store safeguards your personal data, guest checkout information, and payment transactions.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+  openGraph: {
+    title: "Privacy Policy | CatchyDeals Digital Store",
+    description: "Learn how CatchyDeals Digital Store protects your data and privacy.",
+    url: "/privacy-policy",
+  },
+};
+
 export default function page() {
   return (
     <>

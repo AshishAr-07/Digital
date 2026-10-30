@@ -3,105 +3,48 @@ import { dbConnect } from "@/db/config";
 import Order from "@/models/order.models";
 import Product from "@/models/product.models";
 import { checkAdmin } from "@/app/lib/checkAdmin";
-import { auth } from "@clerk/nextjs/server";
 
-// POST - Create a new order
-export async function POST(request) {
-  try {
-    const { userId } = await auth();
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized. Please sign in." },
-        { status: 401 }
-      );
-    }
-
-    await dbConnect();
-
-    const body = await request.json();
-    const { email, name, productIds, razorpayOrderId } = body;
-
-    // Validate required fields
-    if (!email || !name || !productIds || !Array.isArray(productIds) || productIds.length === 0) {
-      return NextResponse.json(
-        { success: false, message: "Email, name, and at least one product are required" },
-        { status: 400 }
-      );
-    }
-
-    // Fetch product details
-    const products = await Product.find({ _id: { $in: productIds } });
-
-    if (products.length !== productIds.length) {
-      return NextResponse.json(
-        { success: false, message: "One or more products not found" },
-        { status: 404 }
-      );
-    }
-
-    // Calculate total amount and prepare products array
-    let totalAmount = 0;
-    const orderProducts = products.map((product) => {
-      totalAmount += product.salePrice;
-      return {
-        productId: product._id,
-        title: product.title,
-        salePrice: product.salePrice,
-        canvaUrl: product.canvaUrl,
-        imagePath: product.imagesPath[0] || ""
-      };
-    });
-
-    // Create order
-    const order = await Order.create({
-      userId,
-      email,
-      name,
-      products: orderProducts,
-      totalAmount,
-      payment: {
-        razorpayOrderId: razorpayOrderId || `temp_${Date.now()}`,
-        status: 'pending'
-      },
-      orderStatus: 'processing'
-    });
-
-    return NextResponse.json(
-      { success: true, message: "Order created successfully", data: order },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("POST Order Error:", error);
-    return NextResponse.json(
-      { success: false, message: "Failed to create order", error: error.message },
-      { status: 500 }
-    );
-  }
-}
-
-// GET - Fetch orders (all for admin, user-specific for regular users)
+// GET - Fetch orders
+// Admin (authenticated via Clerk): all orders, or by ?id=<orderId>
+// Guest: by ?email=<email>&orderId=<orderId> for order confirmation lookup
 export async function GET(request) {
   try {
-    const { userId } = await auth();
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized. Please sign in." },
-        { status: 401 }
-      );
-    }
-
     await dbConnect();
 
     const { searchParams } = new URL(request.url);
     const orderId = searchParams.get("id");
-    const isAdmin = await checkAdmin();
+    const email = searchParams.get("email");
 
-    if (orderId) {
-      // Fetch single order
-      const order = await Order.findById(orderId).populate('products.productId');
-      
+    // Check admin status (non-fatal — returns false if not signed in)
+    let isAdmin = false;
+    try {
+      isAdmin = await checkAdmin();
+    } catch (_) {}
+
+    if (isAdmin) {
+      // Admin: full access
+      if (orderId) {
+        const order = await Order.findById(orderId);
+        if (!order) {
+          return NextResponse.json(
+            { success: false, message: "Order not found" },
+            { status: 404 }
+          );
+        }
+        return NextResponse.json({ success: true, data: order });
+      }
+
+      const orders = await Order.find({}).sort({ createdAt: -1 });
+      return NextResponse.json({ success: true, data: orders, count: orders.length });
+    }
+
+    // Guest lookup: must provide both orderId AND email for security
+    if (orderId && email) {
+      const order = await Order.findOne({
+        _id: orderId,
+        email: email.trim().toLowerCase(),
+      });
+
       if (!order) {
         return NextResponse.json(
           { success: false, message: "Order not found" },
@@ -109,33 +52,21 @@ export async function GET(request) {
         );
       }
 
-      // Check authorization
-      if (!isAdmin && order.userId !== userId) {
-        return NextResponse.json(
-          { success: false, message: "Unauthorized to view this order" },
-          { status: 403 }
-        );
-      }
-
       return NextResponse.json({ success: true, data: order });
     }
 
-    // Fetch multiple orders
-    let query = {};
-    if (!isAdmin) {
-      // Regular users can only see their own orders
-      query.userId = userId;
+    // Fetch all orders for a given email (guest order history)
+    if (email) {
+      const orders = await Order.find({ email: email.trim().toLowerCase() })
+        .sort({ createdAt: -1 });
+      return NextResponse.json({ success: true, data: orders, count: orders.length });
     }
 
-    const orders = await Order.find(query)
-      .populate('products.productId')
-      .sort({ createdAt: -1 });
-
-    return NextResponse.json({ 
-      success: true, 
-      data: orders,
-      count: orders.length 
-    });
+    // No valid lookup params provided
+    return NextResponse.json(
+      { success: false, message: "Please provide an email address to look up orders" },
+      { status: 400 }
+    );
   } catch (error) {
     console.error("GET Order Error:", error);
     return NextResponse.json(
@@ -145,15 +76,18 @@ export async function GET(request) {
   }
 }
 
-// PUT - Update order (payment confirmation, status update)
+// PUT - Update order status (Admin only)
 export async function PUT(request) {
   try {
-    const { userId } = await auth();
-    
-    if (!userId) {
+    let isAdmin = false;
+    try {
+      isAdmin = await checkAdmin();
+    } catch (_) {}
+
+    if (!isAdmin) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized. Please sign in." },
-        { status: 401 }
+        { success: false, message: "Unauthorized. Admin access required." },
+        { status: 403 }
       );
     }
 
@@ -178,42 +112,11 @@ export async function PUT(request) {
       );
     }
 
-    const isAdmin = await checkAdmin();
-
-    // Check authorization
-    if (!isAdmin && order.userId !== userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized to update this order" },
-        { status: 403 }
-      );
-    }
-
-    // Update payment details if provided
-    if (razorpayPaymentId) {
-      order.payment.razorpayPaymentId = razorpayPaymentId;
-    }
-    if (razorpaySignature) {
-      order.payment.razorpaySignature = razorpaySignature;
-    }
-    if (paymentStatus) {
-      order.payment.status = paymentStatus;
-    }
-
-    // Update order status (admin only for manual updates)
-    if (orderStatus) {
-      if (!isAdmin && orderStatus !== 'completed') {
-        return NextResponse.json(
-          { success: false, message: "Only admins can manually update order status" },
-          { status: 403 }
-        );
-      }
-      order.orderStatus = orderStatus;
-    }
-
-    // If payment is completed, update order status to completed
-    if (paymentStatus === 'completed') {
-      order.orderStatus = 'completed';
-    }
+    if (razorpayPaymentId) order.payment.razorpayPaymentId = razorpayPaymentId;
+    if (razorpaySignature) order.payment.razorpaySignature = razorpaySignature;
+    if (paymentStatus) order.payment.status = paymentStatus;
+    if (orderStatus) order.orderStatus = orderStatus;
+    if (paymentStatus === 'completed') order.orderStatus = 'completed';
 
     await order.save();
 
@@ -234,8 +137,11 @@ export async function PUT(request) {
 // DELETE - Delete order (Admin only)
 export async function DELETE(request) {
   try {
-    const isAdmin = await checkAdmin();
-    
+    let isAdmin = false;
+    try {
+      isAdmin = await checkAdmin();
+    } catch (_) {}
+
     if (!isAdmin) {
       return NextResponse.json(
         { success: false, message: "Unauthorized. Admin access required." },

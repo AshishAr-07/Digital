@@ -1,6 +1,20 @@
 import Wrapper from "@/app/components/Wrapper";
 import React from "react";
 
+export const metadata = {
+  title: "Terms and Conditions | CatchyDeals Digital Store",
+  description:
+    "Terms and conditions for purchasing and using our digital templates, party games, invitations, and Canva assets.",
+  alternates: {
+    canonical: "/terms-and-conditions",
+  },
+  openGraph: {
+    title: "Terms and Conditions | CatchyDeals Digital Store",
+    description: "Terms and conditions for using CatchyDeals digital products and templates.",
+    url: "/terms-and-conditions",
+  },
+};
+
 export default function page() {
   return (
     <>

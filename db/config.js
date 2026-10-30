@@ -21,8 +21,9 @@ export async function dbConnect() {
   }
 
   if (!cached.promise) {
-    mongoose.connect(MONGODB_URI).then(() => mongoose.connection);
+    cached.promise = mongoose.connect(MONGODB_URI).then((m) => m.connection);
   }
+
   try {
     cached.conn = await cached.promise;
     console.log("MongoDB running successful");
@@ -30,5 +31,6 @@ export async function dbConnect() {
     cached.promise = null;
     throw error;
   }
+
   return cached.conn;
 }

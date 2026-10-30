@@ -1,6 +1,20 @@
 import Wrapper from "@/app/components/Wrapper";
 import React from "react";
 
+export const metadata = {
+  title: "Instant Digital Delivery & Shipping Policy | CatchyDeals",
+  description:
+    "Our products are 100% digital with immediate delivery. Learn how instant PDF download and Canva template links are delivered immediately after checkout.",
+  alternates: {
+    canonical: "/shipping-policy",
+  },
+  openGraph: {
+    title: "Instant Digital Delivery & Shipping Policy | CatchyDeals",
+    description: "Instant delivery policy for digital templates, Canva links, and printable games.",
+    url: "/shipping-policy",
+  },
+};
+
 export default function page() {
   return (
     <Wrapper>
@@ -17,10 +31,10 @@ export default function page() {
         games, and graphics), no physical goods will be shipped to your address.
       </p>
       <p>
-        <span className="font-semibold">Delivery of Services:</span>Upon
+        <span className="font-semibold">Delivery of Services:</span> Upon
         successful payment, you will receive an automated email containing your
         download links. You can also access your files immediately from the
-        "Order Success" page.
+        &ldquo;Order Success&rdquo; page.
       </p>
       <p>If you do not receive your digital delivery within 30 minutes, please contact us at <span className="font-semibold">digital.catchydeals@gmail.com</span> </p>
      </div>

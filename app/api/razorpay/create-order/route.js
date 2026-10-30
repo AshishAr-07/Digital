@@ -1,28 +1,45 @@
 // app/api/razorpay/create-order/route.js
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
-import { auth } from "@clerk/nextjs/server";
+import { dbConnect } from "@/db/config";
+import Product from "@/models/product.models";
 
 export async function POST(request) {
   try {
-    const { userId } = await auth();
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized. Please sign in." },
-        { status: 401 }
-      );
-    }
-
     const body = await request.json();
-    const { amount, currency = "INR", productId, productTitle } = body;
+    const { currency = "INR", productId } = body;
 
-    if (!amount || !productId) {
+    if (!productId) {
       return NextResponse.json(
-        { success: false, message: "Amount and product ID are required" },
+        { success: false, message: "Product ID is required" },
         { status: 400 }
       );
     }
+
+    // Fetch actual price from DB — never trust frontend-submitted prices
+    await dbConnect();
+    const product = await Product.findById(productId);
+    if (!product) {
+      return NextResponse.json(
+        { success: false, message: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+    // Currency conversion rates (keep in sync with frontend)
+    const rates = {
+      INR: 83.12,
+      USD: 1,
+      EUR: 0.92,
+      GBP: 0.79,
+      CAD: 1.36,
+      AUD: 1.53,
+    };
+
+    const supportedCurrencies = Object.keys(rates);
+    const selectedCurrency = supportedCurrencies.includes(currency) ? currency : "INR";
+    const rate = rates[selectedCurrency];
+    const actualAmount = product.salePrice * rate;
 
     // Initialize Razorpay instance
     const razorpay = new Razorpay({
@@ -31,19 +48,18 @@ export async function POST(request) {
     });
 
     // Generate short receipt ID (max 40 chars)
-    const timestamp = Date.now().toString().slice(-8); // Last 8 digits
-    const productIdShort = productId.toString().slice(-10); // Last 10 chars
-    const receipt = `rcpt_${productIdShort}_${timestamp}`; // Total ~24 chars
+    const timestamp = Date.now().toString().slice(-8);
+    const productIdShort = productId.toString().slice(-10);
+    const receipt = `rcpt_${productIdShort}_${timestamp}`;
 
     // Create Razorpay order
     const options = {
-      amount: Math.round(amount * 100), // Convert to paise (smallest currency unit)
-      currency: currency,
+      amount: Math.round(actualAmount * 100), // Convert to smallest currency unit
+      currency: selectedCurrency,
       receipt: receipt,
       notes: {
-        userId: userId,
         productId: productId,
-        productTitle: productTitle,
+        productTitle: product.title,
       },
     };
 
@@ -55,6 +71,8 @@ export async function POST(request) {
       amount: order.amount,
       currency: order.currency,
       key: process.env.RAZORPAY_KEY_ID,
+      // Return server-computed amount for display
+      displayAmount: actualAmount,
     });
   } catch (error) {
     console.error("Razorpay Create Order Error:", error);

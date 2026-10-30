@@ -1,6 +1,20 @@
 import Wrapper from "@/app/components/Wrapper";
 import React from "react";
 
+export const metadata = {
+  title: "Refund & Cancellation Policy | CatchyDeals Digital Store",
+  description:
+    "Review our digital download refund and cancellation policy. We guarantee access support and assistance for all Canva template purchases.",
+  alternates: {
+    canonical: "/refund-policy",
+  },
+  openGraph: {
+    title: "Refund & Cancellation Policy | CatchyDeals Digital Store",
+    description: "Policy regarding digital downloads, instant Canva template access, and customer support.",
+    url: "/refund-policy",
+  },
+};
+
 export default function page() {
   return (
     <Wrapper>

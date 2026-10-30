@@ -1,100 +1,186 @@
-import React from 'react'
-import Wrapper from './Wrapper'
+import React from "react";
+import Wrapper from "./Wrapper";
 import { IoIosArrowForward } from "react-icons/io";
-import { FaFacebookF,} from "react-icons/fa";
-import Link from 'next/link';
-import { FaPinterest } from 'react-icons/fa6';
-
+import { FaFacebookF } from "react-icons/fa";
+import { FaPinterest } from "react-icons/fa6";
+import { IoMailOutline, IoLocationOutline, IoCallOutline } from "react-icons/io5";
+import Link from "next/link";
+import { siteConfig } from "@/lib/siteConfig";
 
 export default function Footer() {
-    return (
-        <footer className='w-full bg-gray-900 text-white'>
-            <Wrapper className='pb-2 pt-8'>
-                <div className='grid grid-cols-1 md:grid-cols-4 gap-12 py-6'>
-                    <section className='flex flex-col gap-2 md:col-span-2'>
-                        <div>
-                            {/* <Link href='/'>
-                                <Image src="/logo.png" alt="Eimpika Logo" width={80} height={50} />
-                            </Link> */}
-                            <p className='text-lg pt-2'>We are committed to your holiday cheer by offering a wide range of high-quality digital templates and games at affordable prices.</p>
-                        </div>
-                        {/* <div className='grid grid-cols-1 md:grid-cols-2 pt-6 gap-4'>
-                            <section className='flex flex-col gap-2'>
-                                <span className='flex items-center gap-3'>
-                                    <IoMailUnreadOutline size={28} className="min-w-[25px] mt-1" />
-                                    <h2 className=' sm:text-base'>Mail </h2>
-                                </span>
-                                <p>eimpikaweb@gmail.com</p>
-                            </section>
-                            <section className='flex flex-col gap-2'>
-                                <span className='flex items-center gap-3'>
-                                    <RiMapPinLine size={28} className="min-w-[25px] mt-1" />
-                                    <h2 className=' sm:text-base'>Address</h2>
-                                </span>
-                                <p>Aurora Waterfront, 10th Floor, Unit No. 1016 & 1017 GN BLOCK, Plot No. 34/1, Sector V, Salt Lake, Kolkata-700091, W.B, IN</p>
-                            </section>
-
-                        </div> */}
-                    </section>
-                    <section className='flex flex-col gap-2'>
-                        <h1 className='text-2xl pb-2 font-medium '>Useful Links</h1>
-                        <Link href='/about'>
-                            <span className='flex items-center gap-2'><IoIosArrowForward size={15} />About</span></Link>
-                        <Link href='/contact'>
-                            <span className='flex items-center gap-2'><IoIosArrowForward size={15} />Contact</span></Link>
-                        <Link href='/shipping-policy'>
-                            <span className='flex items-center gap-2'><IoIosArrowForward size={15} />Shipping Policy</span></Link>
-                        <Link href='/refund-policy'>
-                            <span className='flex items-center gap-2'><IoIosArrowForward size={15} />Refund Policy</span></Link>
-
-                    </section>
-                    <section className='flex flex-col gap-2'>
-                        <h1 className='text-2xl pb-2 font-medium '>Social Links</h1>
-                        <div className='flex gap-4'>
-                            <Link href="https://www.facebook.com/catchydeals07/" target="_blank" rel="noopener noreferrer"
-                                className='p-2 rounded-full bg-blue-600'>
-                                <FaFacebookF size={20} />
-                            </Link>
-
-                            <Link href="https://in.pinterest.com/Catchydeals07" target="_blank" rel="noopener noreferrer"
-                                className='p-2 rounded-full bg-pink-600'>
-                                <FaPinterest size={20} />
-                            </Link>
-
-                        </div>
-                    </section>
-                </div>
-                <div className='w-full mt-8 text-sm py-4 border-t border-gray-200'>
-
-                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className=" text-center md:text-left">
-              © {new Date().getFullYear()} All rights reserved.
+  return (
+    <footer className="w-full bg-gray-950 text-gray-300 border-t border-gray-800">
+      <Wrapper className="pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-gray-800">
+          {/* Brand & Mission */}
+          <div className="lg:col-span-2 space-y-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 group"
+              aria-label="CatchyDeals Home"
+            >
+              <span className="w-8 h-8 rounded-lg bg-red-700 flex items-center justify-center text-white font-black text-base shadow-sm">
+                C
+              </span>
+              <span className="text-xl font-bold tracking-tight text-white group-hover:text-red-400 transition-colors">
+                CatchyDeals <span className="text-red-500">Digital</span>
+              </span>
+            </Link>
+            <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+              Your trusted destination for holiday party games, festive bingo bundles, customizable party invitations, and digital greetings. All designs are ready for instant download and 100% editable in free Canva.
+            </p>
+            <div className="pt-2 flex flex-col gap-2 text-xs text-gray-400">
+              <span className="inline-flex items-center gap-2">
+                <IoMailOutline className="text-red-500 text-base shrink-0" />
+                <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-white transition-colors">
+                  {siteConfig.contact.email}
+                </a>
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <IoCallOutline className="text-red-500 text-base shrink-0" />
+                <a href={`tel:${siteConfig.contact.phone}`} className="hover:text-white transition-colors">
+                  {siteConfig.contact.phone}
+                </a>
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <IoLocationOutline className="text-red-500 text-base shrink-0" />
+                <span>{siteConfig.contact.address}</span>
+              </span>
             </div>
-            <nav>
-              <ul className="flex justify-center md:justify-end space-x-8 ">
-                <li>
-                  <Link
-                    href="/privacy-policy"
-                    className="hover:text-white hover:scale-105 transform transition-all duration-300"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="terms-and-conditions"
-                    className="hover:text-white hover:scale-105 transform transition-all duration-300"
-                  >
-                    Terms and Conditions
-                  </Link>
-                </li>
-              </ul>
-            </nav>
           </div>
-            
-                </div>
 
-            </Wrapper>
-        </footer>
-    )
+          {/* Quick Navigation */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Explore
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#catalog"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  Browse Templates
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#how-it-works"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  How It Works
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/orders"
+                  className="hover:text-white transition-colors flex items-center gap-1.5 text-red-400"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  My Orders
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company & Support */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Support & Company
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/about"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  Contact Support
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/shipping-policy"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  Delivery Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/refund-policy"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <IoIosArrowForward size={12} className="text-red-500" />
+                  Refund Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social & Trust */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Connect With Us
+            </h3>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Follow our official channels for new holiday template releases and celebration ideas.
+            </p>
+            <div className="flex gap-3">
+              <a
+                href={siteConfig.social.pinterest}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="CatchyDeals on Pinterest"
+                className="w-9 h-9 rounded-full bg-red-600/90 hover:bg-red-600 flex items-center justify-center text-white transition-transform hover:scale-110"
+              >
+                <FaPinterest size={16} />
+              </a>
+            </div>
+            <div className="pt-2 text-xs text-gray-400">
+              <span className="block font-medium text-gray-300">🔒 Secure Guest Checkout</span>
+              <span className="block text-[11px] text-gray-500">Instant access sent to your email</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+          <p>© {new Date().getFullYear()} CatchyDeals Digital Store. All rights reserved.</p>
+          <div className="flex flex-wrap gap-6">
+            <Link href="/privacy-policy" className="hover:text-gray-300 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-and-conditions" className="hover:text-gray-300 transition-colors">
+              Terms & Conditions
+            </Link>
+            <Link href="/refund-policy" className="hover:text-gray-300 transition-colors">
+              Refund Policy
+            </Link>
+          </div>
+        </div>
+      </Wrapper>
+    </footer>
+  );
 }

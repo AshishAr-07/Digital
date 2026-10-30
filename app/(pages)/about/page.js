@@ -1,6 +1,21 @@
 import React from "react";
 import Wrapper from "@/app/components/Wrapper";
 
+export const metadata = {
+  title: "About Us | CatchyDeals Digital Store",
+  description:
+    "Learn about CatchyDeals Digital Store - our mission to bring holiday cheer with beautifully designed digital games, templates, and greetings that you can edit in Canva and print instantly.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Us | CatchyDeals Digital Store",
+    description:
+      "Learn about our mission to make festive celebrations easy and affordable with instant-access digital designs.",
+    url: "/about",
+  },
+};
+
 export default function page() {
   return (
     <div className="bg-linear-to-b from-red-50 to-white">
@@ -24,7 +39,7 @@ export default function page() {
               The idea for this shop started with a simple realization: Holidays
               are magical, but the preparation can be overwhelming. Between
               shipping delays, out-of-stock decorations, and the rush of
-              planning parties, the "fun" often gets lost in the "to-do" list.
+              planning parties, the &ldquo;fun&rdquo; often gets lost in the &ldquo;to-do&rdquo; list.
             </p>
             <p>
               We wanted to change that. By combining creative design with modern
@@ -81,7 +96,7 @@ export default function page() {
                 </h3>
                 <p className="text-gray-600">
                   Premium designs at prices everyone can afford, because joy
-                  shouldn't break the bank.
+                  shouldn&apos;t break the bank.
                 </p>
               </div>
             </div>
@@ -92,7 +107,7 @@ export default function page() {
                   Customer Focused
                 </h3>
                 <p className="text-gray-600">
-                  Your satisfaction drives everything we do. We're here to make
+                  Your satisfaction drives everything we do. We&apos;re here to make
                   your celebrations special.
                 </p>
               </div>

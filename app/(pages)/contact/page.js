@@ -12,6 +12,21 @@ import Link from "next/link";
 import Wrapper from "@/app/components/Wrapper";
 import ContactForm from "@/app/components/ContacForm";
 
+export const metadata = {
+  title: "Contact & Customer Support | CatchyDeals Digital Store",
+  description:
+    "Get in touch with CatchyDeals Digital Store support. Need help with template access, Canva links, or custom questions? We are here to help.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact & Customer Support | CatchyDeals Digital Store",
+    description:
+      "Get in touch with our team for questions about digital templates, instant downloads, and Canva access.",
+    url: "/contact",
+  },
+};
+
 export default function ContactPage() {
   return (
     <>
@@ -24,7 +39,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-2xl font-semibold mb-3">Address</h3>
             <p className="mb-2">
-               New Delhi, Delhi 110077 , India
+              New Delhi, Delhi 110077 , India
             </p>
           </div>
 
@@ -45,13 +60,6 @@ export default function ContactPage() {
             </div>
             <h3 className="text-2xl font-semibold mb-3">Connect With Us</h3>
             <div className="flex space-x-4 mb-6">
-              <Link
-                href="https://www.facebook.com/catchydeals07/"
-                className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white"
-              >
-                <span className="sr-only">Facebook</span>
-                <FaFacebookF className="h-5 w-5" />
-              </Link>
               <Link
                 href="https://in.pinterest.com/Catchydeals07"
                 className="h-10 w-10 rounded-full bg-pink-600 flex items-center justify-center text-white"

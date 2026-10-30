@@ -101,7 +101,7 @@ export default function Counter() {
                         </button>
                         <p className='text-red-50 mt-4 text-sm md:text-base font-semibold flex items-center justify-center gap-2'>
                             <span className='animate-pulse'>⭐</span>
-                            Limited Holiday Offer - Don't Miss Out!
+                            Limited Holiday Offer - Don&apos;t Miss Out!
                             <span className='animate-pulse'>⭐</span>
                         </p>
                     </div>
