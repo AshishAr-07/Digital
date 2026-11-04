@@ -21,9 +21,6 @@ const Navbar = () => {
               aria-label="CatchyDeals Digital Store Home"
               className="group flex items-center gap-2"
             >
-              <span className="w-8 h-8 rounded-lg bg-red-700 flex items-center justify-center text-white font-black text-base shadow-sm group-hover:scale-105 transition-transform">
-                C
-              </span>
               <span className="text-base sm:text-lg md:text-xl font-extrabold tracking-tight text-gray-900 group-hover:text-red-700 transition-colors">
                 CatchyDeals{" "}
                 <span className="font-semibold text-red-700">Digital</span>
