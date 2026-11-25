@@ -50,7 +50,7 @@ export async function POST(request) {
     await dbConnect();
 
     const body = await request.json();
-    const { title, description, salePrice, originalPrice, imagesPath, canvaUrl } = body;
+    const { title, description, salePrice, originalPrice, imagesPath, canvaUrl, linkType } = body;
 
     // Validate required fields
     if (!title || !description || !salePrice || !originalPrice || !imagesPath || !canvaUrl) {
@@ -76,6 +76,7 @@ export async function POST(request) {
       originalPrice,
       imagesPath,
       canvaUrl,
+      linkType: linkType || 'canva',
     });
 
     return NextResponse.json(
@@ -106,7 +107,7 @@ export async function PUT(request) {
     await dbConnect();
 
     const body = await request.json();
-    const { id, title, description, salePrice, originalPrice, imagesPath, canvaUrl } = body;
+    const { id, title, description, salePrice, originalPrice, imagesPath, canvaUrl, linkType } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -126,7 +127,7 @@ export async function PUT(request) {
     // Update product
     const product = await Product.findByIdAndUpdate(
       id,
-      { title, description, salePrice, originalPrice, imagesPath, canvaUrl },
+      { title, description, salePrice, originalPrice, imagesPath, canvaUrl, linkType: linkType || 'canva' },
       { new: true, runValidators: true }
     );
 

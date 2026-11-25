@@ -296,7 +296,7 @@ export default function Product() {
                             </span>
                           )}
                         <span className="ml-auto text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                          Canva Ready
+                          {product.linkType === 'drive' ? 'Drive Download' : 'Canva Ready'}
                         </span>
                       </div>
                     </div>

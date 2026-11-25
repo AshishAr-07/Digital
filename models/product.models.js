@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema(
     originalPrice: { type: Number, required: true },
     imagesPath: [{ type: String, required: true }],
     canvaUrl: { type: String, required: true },
+    linkType: { type: String, enum: ['canva', 'drive'], default: 'canva' },
   },
   { timestamps: true }
 );

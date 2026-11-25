@@ -88,6 +88,7 @@ export async function POST(request) {
         title: product.title,
         salePrice: product.salePrice,
         canvaUrl: product.canvaUrl,
+        linkType: product.linkType || 'canva',
         imagePath: product.imagesPath?.[0] || ""
       }],
       totalAmount: product.salePrice, // always use server price in USD

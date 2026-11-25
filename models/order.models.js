@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema(
         title: { type: String, required: true },
         salePrice: { type: Number, required: true },
         canvaUrl: { type: String, required: true },
+        linkType: { type: String, enum: ['canva', 'drive'], default: 'canva' },
         imagePath: { type: String, default: "" }
       }
     ],

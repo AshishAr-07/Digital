@@ -18,6 +18,7 @@ export default function AdminPage() {
     originalPrice: "",
     imagesPath: [""],
     canvaUrl: "",
+    linkType: "canva",
   });
   const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -90,6 +91,7 @@ export default function AdminPage() {
         originalPrice: product.originalPrice,
         imagesPath: product.imagesPath && product.imagesPath.length > 0 ? product.imagesPath : [""],
         canvaUrl: product.canvaUrl,
+        linkType: product.linkType || "canva",
       });
     } else {
       setEditingProduct(null);
@@ -100,6 +102,7 @@ export default function AdminPage() {
         originalPrice: "",
         imagesPath: [""],
         canvaUrl: "",
+        linkType: "canva",
       });
     }
     setShowModal(true);
@@ -115,6 +118,7 @@ export default function AdminPage() {
       originalPrice: "",
       imagesPath: [""],
       canvaUrl: "",
+      linkType: "canva",
     });
   };
 
@@ -416,7 +420,27 @@ export default function AdminPage() {
 
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-300">
-                      🔗 Canva URL
+                      📁 Link Type
+                    </label>
+                    <select
+                      name="linkType"
+                      value={formData.linkType}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
+                    >
+                      <option value="canva">🎨 Canva Template</option>
+                      <option value="drive">☁️ Google Drive Download</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.linkType === 'canva'
+                        ? 'User gets a Canva link to edit the template.'
+                        : 'User gets a Google Drive link to download files.'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-gray-300">
+                      🔗 {formData.linkType === 'drive' ? 'Google Drive URL' : 'Canva URL'}
                     </label>
                     <input
                       type="url"
@@ -425,7 +449,7 @@ export default function AdminPage() {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-500 transition-all"
-                      placeholder="https://canva.com/design/..."
+                      placeholder={formData.linkType === 'drive' ? 'https://drive.google.com/...' : 'https://canva.com/design/...'}
                     />
                   </div>
 
