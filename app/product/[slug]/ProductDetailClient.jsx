@@ -201,6 +201,7 @@ export default function ProductDetailClient({ initialProduct }) {
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                <span>⚡ Instant access delivered to your email</span>
               </div>
             </div>
 
@@ -260,9 +261,6 @@ export default function ProductDetailClient({ initialProduct }) {
                 {formErrors.email && (
                   <p className="text-xs text-red-600 mt-1">{formErrors.email}</p>
                 )}
-                <p className="text-xs text-gray-500 mt-1">
-                  Your Canva template link and order access will be sent here.
-                </p>
               </div>
 
               <div className="pt-2 flex gap-3">
