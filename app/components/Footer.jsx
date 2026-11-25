@@ -19,9 +19,6 @@ export default function Footer() {
               className="inline-flex items-center gap-2 group"
               aria-label="CatchyDeals Home"
             >
-              <span className="w-8 h-8 rounded-lg bg-red-700 flex items-center justify-center text-white font-black text-base shadow-sm">
-                C
-              </span>
               <span className="text-xl font-bold tracking-tight text-white group-hover:text-red-400 transition-colors">
                 CatchyDeals <span className="text-red-500">Digital</span>
               </span>
