@@ -201,7 +201,6 @@ export default function ProductDetailClient({ initialProduct }) {
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                <span>⚡ Instant access delivered to your email</span>
               </div>
             </div>
 
