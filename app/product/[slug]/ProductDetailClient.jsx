@@ -201,7 +201,6 @@ export default function ProductDetailClient({ initialProduct }) {
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                <span>⚡ Instant access delivered to your email</span>
               </div>
             </div>
 
@@ -320,8 +319,8 @@ export default function ProductDetailClient({ initialProduct }) {
                     onClick={() => setSelectedImage(index)}
                     aria-label={`View image ${index + 1}`}
                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedImage === index
-                        ? "border-red-700 shadow-md scale-105"
-                        : "border-gray-200 hover:border-gray-400 opacity-70 hover:opacity-100"
+                      ? "border-red-700 shadow-md scale-105"
+                      : "border-gray-200 hover:border-gray-400 opacity-70 hover:opacity-100"
                       }`}
                   >
                     <Image
