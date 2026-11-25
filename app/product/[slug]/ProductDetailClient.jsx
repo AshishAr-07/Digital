@@ -139,7 +139,7 @@ export default function ProductDetailClient({ initialProduct }) {
             console.error("Verification error:", error);
             alert(
               "Payment verification failed. Please contact support with your payment ID: " +
-                response.razorpay_payment_id
+              response.razorpay_payment_id
             );
           } finally {
             setProcessingPayment(false);
@@ -164,8 +164,8 @@ export default function ProductDetailClient({ initialProduct }) {
   const discount =
     product.originalPrice && product.originalPrice !== product.salePrice
       ? Math.round(
-          ((product.originalPrice - product.salePrice) / product.originalPrice) * 100
-        )
+        ((product.originalPrice - product.salePrice) / product.originalPrice) * 100
+      )
       : 0;
 
   return (
@@ -230,9 +230,8 @@ export default function ProductDetailClient({ initialProduct }) {
                     if (formErrors.name) setFormErrors({ ...formErrors, name: null });
                   }}
                   placeholder="Jane Doe"
-                  className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-hidden text-sm ${
-                    formErrors.name ? "border-red-500 bg-red-50" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-hidden text-sm ${formErrors.name ? "border-red-500 bg-red-50" : "border-gray-300"
+                    }`}
                   autoFocus
                 />
                 {formErrors.name && (
@@ -256,9 +255,8 @@ export default function ProductDetailClient({ initialProduct }) {
                     if (formErrors.email) setFormErrors({ ...formErrors, email: null });
                   }}
                   placeholder="jane@example.com"
-                  className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-hidden text-sm ${
-                    formErrors.email ? "border-red-500 bg-red-50" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-hidden text-sm ${formErrors.email ? "border-red-500 bg-red-50" : "border-gray-300"
+                    }`}
                 />
                 {formErrors.email && (
                   <p className="text-xs text-red-600 mt-1">{formErrors.email}</p>
@@ -321,11 +319,10 @@ export default function ProductDetailClient({ initialProduct }) {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     aria-label={`View image ${index + 1}`}
-                    className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-                      selectedImage === index
+                    className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedImage === index
                         ? "border-red-700 shadow-md scale-105"
                         : "border-gray-200 hover:border-gray-400 opacity-70 hover:opacity-100"
-                    }`}
+                      }`}
                   >
                     <Image
                       src={img}
@@ -408,9 +405,8 @@ export default function ProductDetailClient({ initialProduct }) {
                 id="buy-now-btn"
                 onClick={handleBuyNow}
                 disabled={processingPayment}
-                className={`w-full bg-red-700 text-white rounded-xl py-4 px-8 font-semibold text-lg hover:bg-red-800 hover:shadow-xl hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 cursor-pointer shadow-lg shadow-red-700/25 ${
-                  processingPayment ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`w-full bg-red-700 text-white rounded-xl py-4 px-8 font-semibold text-lg hover:bg-red-800 hover:shadow-xl hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 cursor-pointer shadow-lg shadow-red-700/25 ${processingPayment ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 {processingPayment ? (
                   <span className="flex items-center justify-center">
@@ -440,9 +436,9 @@ export default function ProductDetailClient({ initialProduct }) {
                 <ul className="space-y-2 text-sm text-gray-700">
                   {[
                     "Instant digital delivery immediately upon payment",
-                    "Direct access to editable Canva template",
+                    "Direct access to editable Canva template and Google Drive Links",
                     "Lifetime access — use it year after year",
-                    "Works with 100% Free Canva accounts",
+                    "Canva Links works with 100% Free Canva accounts",
                     "Print at home or share digitally via messaging & social media",
                   ].map((item) => (
                     <li key={item} className="flex items-start">
