@@ -341,9 +341,6 @@ export default function ProductDetailClient({ initialProduct }) {
                 <span className="text-xs font-semibold uppercase tracking-wider text-red-700 bg-red-50 border border-red-200 px-3 py-1 rounded-full">
                   ⚡ Instant Digital Download
                 </span>
-                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                  Canva Template
-                </span>
               </div>
 
               <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">
