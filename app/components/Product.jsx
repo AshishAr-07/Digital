@@ -50,6 +50,9 @@ export default function Product() {
 
   const getProductCategory = (item) => {
     const title = (item.title || "").toLowerCase();
+    if (title.includes("planner")) {
+      return "planner";
+    }
     if (title.includes("game") || title.includes("bingo") || title.includes("bundle")) {
       return "games";
     }
@@ -59,6 +62,7 @@ export default function Product() {
     if (title.includes("greeting")) {
       return "greetings";
     }
+
     return "templates";
   };
 
@@ -67,6 +71,7 @@ export default function Product() {
     { id: "games", label: "Party Games & Bingo" },
     { id: "invitations", label: "Party Invitations" },
     { id: "greetings", label: "Holiday Greetings" },
+    { id: "planner", label: "Party Planner" },
   ];
 
   const filteredProducts = useMemo(() => {
@@ -130,11 +135,10 @@ export default function Product() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? "bg-red-700 text-white shadow-md shadow-red-700/20"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                }`}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedCategory === cat.id
+                  ? "bg-red-700 text-white shadow-md shadow-red-700/20"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
               >
                 {cat.label}
               </button>
@@ -223,8 +227,8 @@ export default function Product() {
               const discount =
                 product.originalPrice && product.originalPrice !== product.salePrice
                   ? Math.round(
-                      ((product.originalPrice - product.salePrice) / product.originalPrice) * 100
-                    )
+                    ((product.originalPrice - product.salePrice) / product.originalPrice) * 100
+                  )
                   : 0;
 
               const categoryKey = getProductCategory(product);
@@ -232,8 +236,10 @@ export default function Product() {
                 categoryKey === "games"
                   ? "Games & Activities"
                   : categoryKey === "invitations"
-                  ? "Party Invitation"
-                  : "Holiday Greeting";
+                    ? "Party Invitation"
+                    : categoryKey === "planner"
+                      ? "Party Planner"
+                      : "Holiday Greeting";
 
               const imageSrc =
                 product.imagesPath && product.imagesPath[0]
