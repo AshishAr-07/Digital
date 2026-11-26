@@ -26,6 +26,9 @@ export default function Footer() {
             <p className="text-sm text-gray-400 leading-relaxed max-w-md">
               Your trusted destination for holiday party games, festive bingo bundles, customizable party invitations, and digital greetings. All designs are ready for instant download and 100% editable in free Canva.
             </p>
+            <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+              Serving customers in USA, Canada, UK, Australia & worldwide.
+            </p>
             <div className="pt-2 flex flex-col gap-2 text-xs text-gray-400">
               <span className="inline-flex items-center gap-2">
                 <IoMailOutline className="text-red-500 text-base shrink-0" />
@@ -33,16 +36,16 @@ export default function Footer() {
                   {siteConfig.contact.email}
                 </a>
               </span>
-              <span className="inline-flex items-center gap-2">
+              {/* <span className="inline-flex items-center gap-2">
                 <IoCallOutline className="text-red-500 text-base shrink-0" />
                 <a href={`tel:${siteConfig.contact.phone}`} className="hover:text-white transition-colors">
                   {siteConfig.contact.phone}
                 </a>
-              </span>
-              <span className="inline-flex items-center gap-2">
+              </span> */}
+              {/* <span className="inline-flex items-center gap-2">
                 <IoLocationOutline className="text-red-500 text-base shrink-0" />
                 <span>{siteConfig.contact.address}</span>
-              </span>
+              </span> */}
             </div>
           </div>
 
